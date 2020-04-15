@@ -24,3 +24,17 @@ where cno != 'CS112'
 group by sno, sname
 
 # Q3: Which students take at least three courses?
+
+with amount_classes as (
+	select sno, count(cno) as classes
+	from take
+	group by sno
+	)
+
+select s.sno, sname, classes
+from student as s
+join amount_classes as ac
+on s.sno = ac.sno
+
+where classes >= 3
+
