@@ -42,6 +42,8 @@ on s.sno = ac.sno
 where classes >= 3
 
 # Q4: Find students who take CS112 or CS114 but not both.
+
+# need to fix, doesn't return the answer needed yet
 select sno, sname, more_than_one
 from (
 	select 
@@ -98,14 +100,23 @@ on s.sno = ac.sno
 where classes <=2
 
 -- Q7: Find the students who take only CS112 and nothing else.
+select one_class.sno, sname, cno
+from take as t
+join (
+	select *
+	from(
+		select s.sno, sname, count(cno)
+		from student as s
+		join take as t 
+		on s.sno = t.sno
 
-select sno, sname
-from student 
-where sno IN (
-	select sno
-	from take
-	where cno = 'CS112'
-	)
+		group by s.sno, sname
+		) as classcounts
+
+	where count = 1) as one_class
+on one_class.sno = t.sno
+
+where cno = 'CS112'
 
 -- Q8: Find the youngest students WITHOUT using MIN() or MAX().
 select *
