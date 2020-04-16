@@ -98,7 +98,23 @@ on s.sno = ac.sno
 where classes <=2
 
 -- Q7: Find the students who take only CS112 and nothing else.
+
+select sno, sname
+from student 
+where sno IN (
+	select sno
+	from take
+	where cno = 'CS112'
+	)
+
 -- Q8: Find the youngest students WITHOUT using MIN() or MAX().
+select *
+	from (
+	select 
+	*
+	, row_number () over (order by age) as asc_age
 
-
+	from student
+	) as ordered_ages
+where asc_age = 1
 
